@@ -56,7 +56,33 @@ if ($_POST['Function']) {
         function addUser($userName, $email, $password, $phoneNo, $designation, $firstName, $lastName)
         {
             global $conn;
-            $sql = "INSERT INTO `user_details` ( `role`, `username`, `password`, `email`,`firstname`, `lastname`, `phoneno`, `designation`, `img`) VALUES ( 'staff', '$userName', '$password', '$email', '$firstName', '$lastName', '$phoneNo', '$designation', '') ";
+
+            // Image Processor
+            // Attachment file save section
+            if (!(empty($_FILES['profileImage']['name'][0]) == '' ? 0 : 1)) {
+
+                // Code for retrieving the uploaded file and move it to physical location
+                for ($i = 0; $i < count($_FILES['profileImage']['name']); $i++) {
+                    if ($_FILES["profileImage"]["error"][$i] > 0) {
+                        return "Error: " . $_FILES["profileImage"]["error"][$i];
+                    } else {
+                        if ($_FILES['profileImage']['error'][$i] === UPLOAD_ERR_OK) {
+
+                            // $mime_type = mime_content_type($_FILES['profileImage']['tmp_name'][$i]);
+                            // if ($mime_type === 'image/png' || $mime_type === 'image/jpeg' || $mime_type === 'image/jpg') {
+                            $original_file_name = $_FILES["profileImage"]["name"][$i];
+
+                            // Use pathinfo to get the file extension
+                            $file_info = pathinfo($original_file_name);
+                            $file_extension = $file_info['extension'];
+                            $new_file_name = $userName . '.' . $file_extension;
+                            //uploading file
+                            move_uploaded_file($_FILES["profileImage"]["tmp_name"][$i], $_SERVER['DOCUMENT_ROOT'] . "/ceo_dashboard/images/userProfileImages/" . $new_file_name);
+                        }
+                    }
+                }
+            }
+            $sql = "INSERT INTO `user_details` ( `role`, `username`, `password`, `email`,`firstname`, `lastname`, `phoneno`, `designation`, `img`) VALUES ( 'staff', '$userName', '$password', '$email', '$firstName', '$lastName', '$phoneNo', '$designation', '/ceo_dashboard/images/userProfileImages/ $new_file_name') ";
             $result = mysqli_query($conn, $sql);
             if (!$result) return "Error: " . $sql . "<br>" . $conn->error;
             // close database connection
@@ -64,6 +90,7 @@ if ($_POST['Function']) {
             return "OK";
         }
         echo addUser($userName, $email, $password, $phoneNo, $designation, $firstName, $lastName);
+        // print_r($_FILES['profileImage']['name']);
     }
 
 
@@ -101,16 +128,41 @@ if (isset($_POST['Function'])) {
         $emailBody = $_POST['emailBody'];
         function sendEmail($toField, $subject, $emailBody)
         {
-            // Attachment file save section
-            if (!(empty($_FILES['attachmentFile']['name'][0]) == '' ? 0 : 1)) {
 
-                // Code for retrieving the uploaded file and move it to physical location
-                for ($i = 0; $i < count($_FILES['attachmentFile']['name']); $i++) {
-                    if ($_FILES["attachmentFile"]["error"][$i] > 0) {
-                        return "Error: " . $_FILES["attachmentFile"]["error"][$i];
-                    } else {
-                        if ($_FILES['attachmentFile']['error'][$i] === UPLOAD_ERR_OK) {
+            // Email code
+            // Email sender 
+            //Load Composer's autoloader
+            require 'vendor/autoload.php';
+            //Create an instance; passing `true` enables exceptions
+            $mail = new PHPMailer(true);
 
+            try {
+                //Server settings
+                $mail->isSMTP();                                            //Send using SMTP
+                $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+                $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+                $mail->Username   = 'saron9291@gmail.com';                     //SMTP username
+                $mail->Password   = 'yfatdjignmlmihip';                               //SMTP password
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+                $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+                //Recipients
+                $mail->setFrom('saron9291@gmail.com', 'CEO - HYDRA');
+                $mail->addAddress($toField, 'Staff');     //Add a recipient
+                // $mail->addReplyTo('info@example.com', 'Information');
+                //Attachments
+                // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+
+                // } else {
+                //     // file has an invalid type
+                //     return "Error: Invalid File Type.";
+                // }
+
+                if (!(empty($_FILES['studentProfileImage']['name'][0]) == '' ? 0 : 1)) {
+                    // Code for retrieving the uploaded file and move it to physical location
+                    for ($i = 0; $i < count($_FILES['attachmentFile']['name']); $i++) {
+                        if ($_FILES["attachmentFile"]["error"][$i] > 0) {
+                            return "Error: " . $_FILES["attachmentFile"]["error"][$i];
+                        } else {
                             // $mime_type = mime_content_type($_FILES['attachmentFile']['tmp_name'][$i]);
                             // if ($mime_type === 'image/png' || $mime_type === 'image/jpeg' || $mime_type === 'image/jpg') {
                             $original_file_name = $_FILES["attachmentFile"]["name"][$i];
@@ -118,61 +170,30 @@ if (isset($_POST['Function'])) {
                             // Use pathinfo to get the file extension
                             $file_info = pathinfo($original_file_name);
                             $file_extension = $file_info['extension'];
-                            $new_file_name = $_FILES["attachmentFile"]["name"][$i];
+                            // $new_file_name = $_FILES["attachmentFile"]["name"][$i];
 
                             //uploading file
-                            move_uploaded_file($_FILES["attachmentFile"]["tmp_name"][$i], "./emailAttachments/" . $new_file_name);
+                            // move_uploaded_file($_FILES["attachmentFile"]["tmp_name"][$i], "./emailAttachments/" . $new_file_name);
+                            $mail->addAttachment($_FILES["attachmentFile"]["tmp_name"][$i], $original_file_name);    //Optional name
 
-
-                            // Email code
-                            // Email sender 
-                            //Load Composer's autoloader
-                            require 'vendor/autoload.php';
-                            //Create an instance; passing `true` enables exceptions
-                            $mail = new PHPMailer(true);
-
-                            try {
-                                //Server settings
-                                $mail->isSMTP();                                            //Send using SMTP
-                                $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-                                $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                                $mail->Username   = 'saron9291@gmail.com';                     //SMTP username
-                                $mail->Password   = 'yfatdjignmlmihip';                               //SMTP password
-                                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-                                $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-                                //Recipients
-                                $mail->setFrom('saron9291@gmail.com', 'CEO - HYDRA');
-                                $mail->addAddress($toField, 'Staff');     //Add a recipient
-                                // $mail->addReplyTo('info@example.com', 'Information');
-                                //Attachments
-                                // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
-                                $mail->addAttachment("./emailAttachments/" . $new_file_name);    //Optional name
-                                //Content
-                                $mail->isHTML(true);                                  //Set email format to HTML
-                                $mail->Subject = "$subject";
-                                $mail->Body    = "$emailBody";
-                                $mail->AltBody = "-";
-                                $mail->send();
-                                $emailResult = 'Mail has been successfully sent!';
-                            } catch (Exception $e) {
-                                $emailResult = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-                            }
-                            $responseArray = array();
-                            $responseArray[] = 'OK';
-                            $responseArray[] = $emailResult;
-
-                            return $responseArray;
-                            // } else {
-                            //     // file has an invalid type
-                            //     return "Error: Invalid File Type.";
-                            // }
-                        } else {
-                            // there was an error uploading the file
-                            return "Error: There was a error uploading the file.";
                         }
                     }
                 }
+                //Content
+                $mail->isHTML(true);                                  //Set email format to HTML
+                $mail->Subject = "$subject";
+                $mail->Body    = "$emailBody";
+                $mail->AltBody = "-";
+                $mail->send();
+                $emailResult = 'Mail has been successfully sent!';
+            } catch (Exception $e) {
+                $emailResult = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             }
+            $responseArray = array();
+            $responseArray[] = 'OK';
+            $responseArray[] = $emailResult;
+
+            return json_encode($responseArray);
         }
         print_r(sendEmail($toField, $subject, $emailBody));
     }

@@ -80,18 +80,18 @@
 </style>
 
 <body class="vh-100">
-    <div class="authincation h-100">
-        <div class="container h-100">
-            <div class="row justify-content-center h-100 align-items-center">
+    <div class="authincation">
+        <div class="container h-100 d-flex justify-content-center">
+            <div class="row h-100 align-items-center">
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Add New Staffs</h4>
                     </div>
-                    <div class="card-body">
-                        <div class="form-validation">
-                            <form id="addUserForm">
-                                <div class="row">
-                                    <div class="col-xl-6">
+                    <form id="addUserForm" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card-body h-100 d-flex justify-content-center">
+                                    <div class="form-validation">
                                         <div class="mb-3 row">
                                             <label class="col-lg-4 col-form-label" for="validationCustom01">Username
                                                 <span class="text-danger">*</span>
@@ -138,7 +138,7 @@
                                                 <span class="text-danger">*</span>
                                             </label>
                                             <div class="col-lg-6">
-                                                <input type="password" class="form-control" id="password" placeholder="Choose a safe one.." required="" data-parsley-trigger="change" data-parsley-minlength="8" data-parsley-uppercase="1" data-parsley-lowercase="1" data-parsley-number="1" data-parsley-special="1" >
+                                                <input type="password" class="form-control" id="password" placeholder="Choose a safe one.." required="" data-parsley-trigger="change" data-parsley-minlength="8" data-parsley-uppercase="1" data-parsley-lowercase="1" data-parsley-number="1" data-parsley-special="1">
                                                 <div class="invalid-feedback">
                                                     Please enter a password.
                                                 </div>
@@ -173,13 +173,19 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="text-center col-1">
+                                        Profile Pic:
+                                        <img id="userProfilePic" style="width:15vh; height:15vh;" src="/ceo_dashboard/images/profile/small/pic1.jpg" class="rounded mb-2" alt="...">
+                                        <input id="profileImage" name="profileImage[]" type="file" type="text" required="" data-parsley-trigger="change">
+                                    </div>
                                 </div>
-                        </div>
-                        </form>
-                    </div>
+                            </div>
+                    </form>
+                    <div id="Result"></div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     </div>
 
@@ -227,7 +233,22 @@
     </script>
     <!--hide show password icon-->
     <script>
+        // Image preview - User Profile Picture
+
+
         $(document).ready(function(e) {
+            var profileImage = $("#profileImage");
+            var userProfilePic = $("#userProfilePic");
+            $("#profileImage").change(function(e) {
+                file = this.files[0];
+                if (file) {
+                    let reader = new FileReader();
+                    reader.onload = function(event) {
+                        $("#userProfilePic").attr("src", event.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            })
 
             $(function() {
                 $('#addUserForm').parsley().on('field:validated', function() {
@@ -239,9 +260,10 @@
                         return false; // Don't submit form for this demo
                     });
             });
-            $('#addUserBtn').click(function(ee) {
+            $('#addUserForm').submit(function(ee) {
                 if ($('#addUserForm').parsley().isValid()) {
                     ee.preventDefault();
+                    var formData = new FormData(this);
                     var userName = $('#userName').val();
                     var password = $('#password').val();
                     var email = $('#email').val();
@@ -250,29 +272,47 @@
                     var lastName = $('#lastName').val();
                     var designation = $('#designation').val();
                     console.log(`${userName} ${password} ${email} ${phoneNo} ${firstName} ${lastName} ${designation}`);
-                    $.ajax({
-                        url: '../functions.php',
-                        type: 'POST',
-                        data: {
-                            userName: userName,
-                            password: password,
-                            email: email,
-                            phoneNo: phoneNo,
-                            firstName: firstName,
-                            lastName: lastName,
-                            designation: designation,
-                            Function: 'addUser',
-                        },
-                        success: function(response) {
-                            console.log(response);
-                            if (response == "OK") {
-                                $("#Result").html(`<div class="alert alert-success fade show" role="alert"> Successfully Signed Up! </div>`);
-                                window.location.href = "/ceo_dashboard/Ceomodule/ceo_dashboard.php";
-                            } else {
-                                $("#Result").html(`<div class="alert alert-danger fade show" role="alert"> ${response}</div>`);
-                            }
+
+                    // Form data values
+                    formData.append('userName', userName);
+                    formData.append('password', password);
+                    formData.append('email', email);
+                    formData.append('phoneNo', phoneNo);
+                    formData.append('firstName', firstName);
+                    formData.append('lastName', lastName);
+                    formData.append('designation', designation);
+                    formData.append('Function', 'addUser');
+
+                    // Logic for checking the size of the image file being uploaded
+                    if ($("#profileImage").val() !== '') {
+                        // Logic for checking the size of the image file being uploaded
+                        var fileSize = ($("#profileImage")[0].files[0].size / 1024);
+                        fileSize = (Math.round(fileSize * 100) / 100);
+                    }
+
+                    setTimeout(function() {
+                        if (fileSize <= 800) {
+                            $.ajax({
+                                url: '../functions.php',
+                                type: 'POST',
+                                processData: false,
+                                contentType: false,
+                                data: formData,
+                                success: function(response) {
+                                    if (response == "OK") {
+                                        $("#Result").html(`<div class="alert alert-success fade show" role="alert"> Staff Created Successfully! </div>`);
+                                        window.location.href = "/ceo_dashboard/Ceomodule/ceo_dashboard.php";
+
+                                    } else {
+                                        $("#Result").html(`<div class="alert alert-danger fade show" role="alert"> ${response}</div>`);
+                                    }
+                                }
+                            })
+                        } else {
+                            $("#Result").html(`<div class="alert alert-danger fade show" role="alert"> File size has to be within 800kb</div>`);
+                            console.log('File size has to be within 800kb')
                         }
-                    })
+                    }, 1000);
                 }
             })
         })

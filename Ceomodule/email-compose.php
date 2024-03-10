@@ -301,13 +301,14 @@
 										<div class="input-group mb-3">
 											<!-- <button class="btn btn-primary btn-sm" type="button">Button</button> -->
 											<div class="form-file">
-												<input id="attachmentFile" name="attachmentFile[]" type="file" class="form-file-input form-control" required data-parsley-trigger="change" data-parsley-mime-type="text/csv|application/vnd.ms-excel">
+												<input id="attachmentFile" name="attachmentFile[]" type="file" class="form-file-input form-control" data-parsley-trigger="change" data-parsley-mime-type="text/csv|application/vnd.ms-excel" multiple>
 											</div>
 										</div>
 										<div class="text-start mt-4 mb-3">
 											<button class="btn btn-primary btn-sl-sm me-2" type="submit" id="sendEmailBtn"><span class="me-2"><i class="fa fa-paper-plane"></i></span>Send</button>
 										</div>
 									</form>
+									<div id="Result"></div>
 								</div>
 							</div>
 						</div>
@@ -401,9 +402,10 @@
 								processData: false,
 								contentType: false,
 								success: function(response) {
+									response = JSON.parse(response);
 									console.log(response);
-									if (response == "OK") {
-
+									if (response[0] == "OK") {
+										$("#Result").html(`<div class="alert alert-success fade show" role="alert"> Email sent Successfully! </div>`);
 									} else {
 										$("#Result").html(`<div class="alert alert-danger fade show" role="alert"> ${response}</div>`);
 									}
