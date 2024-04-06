@@ -18,10 +18,11 @@
 	<title>Admin Dashboard</title>
 
 	<!-- FAVICONS ICON -->
-	<link rel="../shortcut icon" type="image/png" href="images/favicon.png">
+	<link rel="shortcut icon" type="image/png" href="../images/favicon.png">
 	<link href="../vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
 	<link href="../vendor/dropzone/dist/dropzone.css" rel="stylesheet">
 	<link href="../css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/fileUploadstyle.css">
 
 </head>
 
@@ -85,12 +86,17 @@
 
 						</div>
 						<ul class="navbar-nav header-right">
+							
+
+
+
 							<li class="nav-item dropdown  header-profile">
 								<a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
 									<img src="../images/user.jpg" width="56" alt="">
 								</a>
 								<div class="dropdown-menu dropdown-menu-end">
-									<a href="../ceo_dashboard/signIn.php" class="dropdown-item ai-icon">
+									
+									<a href="../signIn.php" class="dropdown-item ai-icon">
 										<svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 											<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
 											<polyline points="16 17 21 12 16 7"></polyline>
@@ -116,115 +122,34 @@
 		<div class="dlabnav">
 			<div class="dlabnav-scroll">
 				<ul class="metismenu" id="menu">
-					<li><a href="../Ceomodule/ceo_dashboard.php" aria-expanded="false">
+					<li><a href="../Operationmodule/ceo_dashboard.php" aria-expanded="false">
 							<i class="fas fa-home"></i>
 							<span class="nav-text">Dashboard</span>
 						</a>
 					</li>
 
-					<li><a href="../Ceomodule/finance.php" aria-expanded="false">
-							<i class="fas fa-info-circle"></i>
-							<span class="nav-text">Finance</span>
-						</a>
-
-					</li>
-					<li><a href="../Ceomodule/sales.php" aria-expanded="false">
-							<i class="fas fa-chart-line"></i>
-							<span class="nav-text">Sales</span>
-						</a>
-						<!-- <ul aria-expanded="false">
-                            <li><a href="chart-flot.html">Flot</a></li>
-                            <li><a href="chart-morris.html">Morris</a></li>
-                            <li><a href="chart-chartjs.html">Chartjs</a></li>
-                            <li><a href="chart-chartist.html">Chartist</a></li>
-                            <li><a href="chart-sparkline.html">Sparkline</a></li>
-                            <li><a href="chart-peity.html">Peity</a></li>
-                        </ul> -->
-					</li>
-					<li><a href="../Ceomodule/marketing.php" aria-expanded="false">
-							<i class="fab fa-bootstrap"></i>
-							<span class="nav-text">Marketing</span>
-						</a>
-						<!-- <ul aria-expanded="false">
-                            <li><a href="ui-accordion.html">Accordion</a></li>
-                            <li><a href="ui-alert.html">Alert</a></li>
-                            <li><a href="ui-badge.html">Badge</a></li>
-                            <li><a href="ui-button.html">Button</a></li>
-                            <li><a href="ui-modal.html">Modal</a></li>
-                            <li><a href="ui-button-group.html">Button Group</a></li>
-                            <li><a href="ui-list-group.html">List Group</a></li>
-                            <li><a href="ui-card.html">Cards</a></li>
-                            <li><a href="ui-carousel.html">Carousel</a></li>
-                            <li><a href="ui-dropdown.html">Dropdown</a></li>
-                            <li><a href="ui-popover.html">Popover</a></li>
-                            <li><a href="ui-progressbar.html">Progressbar</a></li>
-                            <li><a href="ui-tab.html">Tab</a></li>
-                            <li><a href="ui-typography.html">Typography</a></li>
-                            <li><a href="ui-pagination.html">Pagination</a></li>
-                            <li><a href="ui-grid.html">Grid</a></li>
-
-                        </ul> -->
-					</li>
-					<li><a href="../Ceomodule/operational.php" aria-expanded="false">
+					
+					<li><a href="../Operationalmodule/operational.php" aria-expanded="false">
 							<i class="fas fa-table"></i>
 							<span class="nav-text">Operational</span>
 						</a>
-						<!-- <ul aria-expanded="false">
-                            <li><a href="table-bootstrap-basic.html">Bootstrap</a></li>
-                            <li><a href="table-datatable-basic.html">Datatable</a></li>
-                        </ul> -->
+						
 					</li>
-					<li><a href="../Ceomodule/fileUpload.php" aria-expanded="false">
+					<li><a href="../Operationmodule/fileUpload.php" aria-expanded="false">
 							<i class="fas fa-heart"></i>
 							<span class="nav-text">Files Upload</span>
 						</a>
 
 					</li>
-					<li><a href="../Ceomodule/addUser.php" class="" aria-expanded="false">
-							<i class="fas fa-user-check"></i>
-							<span class="nav-text">Add User</span>
-						</a>
-					</li>
-					<li><a href="../Ceomodule/email-compose.html" aria-expanded="false">
+				
+					<li><a href="../Operationmodule/email-compose.php" aria-expanded="false">
 							<i class="fas fa-file-alt"></i>
 							<span class="nav-text">Send Email</span>
 						</a>
-						<!-- <ul aria-expanded="false">
-                             <li><a href="form-element.html">Form Elements</a></li>
-                            <li><a href="form-wizard.html">Wizard</a></li>
-                            <li><a href="form-ckeditor.html">CkEditor</a></li>
-                            <li><a href="form-pickers.html">Pickers</a></li>
-                            <li><a href="form-validation.html">Form Validate</a></li> 
-                        </ul> -->
+						
 					</li>
 
-					<!-- <li><a href="javascript:void()" aria-expanded="false">
-							<i class="fas fa-clone"></i>
-							<span class="nav-text">Pages</span>
-						</a> -->
-						<!-- <ul aria-expanded="false">
-                            <li><a href="page-login.html">Login</a></li>
-                            <li><a href="page-register.html">Register</a></li>
-                            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Error</a>
-                                <ul aria-expanded="false">
-                                    <li><a href="page-error-400.html">Error 400</a></li>
-                                    <li><a href="page-error-403.html">Error 403</a></li>
-                                    <li><a href="page-error-404.html">Error 404</a></li>
-                                    <li><a href="page-error-500.html">Error 500</a></li>
-                                    <li><a href="page-error-503.html">Error 503</a></li>
-                                </ul> 
-                            </li>
-                            <li><a href="page-lock-screen.html">Lock Screen</a></li>
-                            <li><a href="empty-page.html">Empty Page</a></li>
-                        </ul> 
-                    </li>-->
                 </ul>
-
-<!-- 
-						<div class="copyright">
-							<p><strong>Felix CEO dashboard</strong> © 2023 All Rights Reserved</p>
-							<p class="fs-12">Made with aron2k02</p>
-						</div> -->
 
 			</div>
 		</div>
@@ -312,7 +237,7 @@
         ***********************************-->
 		<div class="footer">
 			<div class="copyright">
-				<p>Copyright © Designed &amp; Developed by aron2k23</p>
+				<p>Copyright © Designed &amp; Developed by aron2k02</p>
 			</div>
 		</div>
 		<!--**********************************

@@ -103,8 +103,9 @@
                                         <div class="mb-3">
                                             <label class="mb-1"><strong>Password</strong></label>
                                             <input type="password" id="password" class="form-control" required data-parsley-trigger="change" data-parsley-minlength="8" data-parsley-uppercase="1" data-parsley-lowercase="1" data-parsley-number="1" data-parsley-special="1" data-parsley-required>
-                                            <img src="images/pass-hide.jpg" onclick="pass1()" class="pass-icon1" id="pass-icon1">
-                                            <!-- <div class="password-checklist">
+                                            <!-- <img src="images/pass-hide.jpg" onclick="pass1()" class="pass-icon1" id="pass-icon1"> -->
+                                        </div>
+                                        <!-- <div class="password-checklist">
                                                 <h3 clsaa="chelist-title">Password should be</h3>
                                                 <ul class="checklist">
                                                     <li class="list-item">Atleast 8 characters long</li>
@@ -114,12 +115,11 @@
                                                     <li class="list-item">Atleast 1 special character </li>
                                                 </ul>
                                             </div> -->
-                                        </div>
 
                                         <div class="mb-3">
                                             <label class="mb-1"><strong>Confirm Password</strong></label>
                                             <input type="password" id="confirmpassword" class="form-control" data-parsley-trigger="change" required data-parsley-equalto="#password">
-                                            <img src="images/pass-hide.jpg" onclick="pass2()" class="pass-icon2" id="pass-icon2" >
+                                            <!-- <img src="images/pass-hide.jpg" onclick="pass2()" class="pass-icon2" id="pass-icon2"> -->
                                         </div>
                                         <div class="text-center mt-4">
                                             <button type="submit" id="signUpBtn" class="btn btn-primary btn-block">Sign me up</button>
