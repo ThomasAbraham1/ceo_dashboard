@@ -102,7 +102,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="mb-1"><strong>Password</strong></label>
-                                            <input type="password" id="password" class="form-control" required data-parsley-trigger="change" data-parsley-minlength="8" data-parsley-uppercase="1" data-parsley-lowercase="1" data-parsley-number="1" data-parsley-special="1" data-parsley-required>
+                                            <input type="password" id="password" class="form-control" required data-parsley-trigger="change" data-parsley-minlength="8" data-parsley-pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$" data-parsley-pattern-message="The password must include at least 1 upper case letter, 8 characters and a symbol"  data-parsley-required>
                                             <!-- <img src="images/pass-hide.jpg" onclick="pass1()" class="pass-icon1" id="pass-icon1"> -->
                                         </div>
                                         <!-- <div class="password-checklist">

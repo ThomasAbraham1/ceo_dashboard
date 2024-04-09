@@ -103,7 +103,7 @@ include 'config.php';
                     </div>
                     <div class="mb-3">
                       <label class="mb-1"><strong>Password</strong></label>
-                      <input type="password" id="password" name="password" class="form-control" required data-parsley-trigger="change" data-parsley-minlength="8" data-parsley-uppercase="1" data-parsley-lowercase="1" data-parsley-number="1" data-parsley-special="1" data-parsley-required />
+                      <input type="password" id="password" name="password" class="form-control" required data-parsley-trigger="change" data-parsley-minlength="8" data-parsley-pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$" data-parsley-pattern-message="The password must include at least 1 upper case letter, 8 characters and a symbol"  data-parsley-required />
                     </div>
                     <div class="row d-flex justify-content-between mt-4 mb-2">
                       <!-- <div class="mb-3">
