@@ -19,10 +19,12 @@
 
 	<!-- FAVICONS ICON -->
 	<link rel="shortcut icon" type="image/png" href="../images/favicon.png">
-    <link href="../vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
-    <link href="../vendor/dropzone/dist/dropzone.css" rel="stylesheet">
-    <link href="../css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/fileUploadstyle.css">
+	<link href="../vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
+	<link href="../vendor/dropzone/dist/dropzone.css" rel="stylesheet">
+	<link href="../css/style.css" rel="stylesheet">
+	<link rel="stylesheet" href="../css/fileUploadstyle.css">
+	<!-- Parsley css for form validation -->
+	<link href="/ceo_dashboard/parsley.css" rel="stylesheet" />
 
 </head>
 
@@ -51,12 +53,9 @@
             Nav header start
         ***********************************-->
 		<div class="nav-header">
-			<a href="javascrpit:void(0)" class="brand-logo">
-				<svg class="logo-abbr" width="55" height="55" viewbox="0 0 55 55" fill="none"
-					xmlns="http://www.w3.org/2000/svg">
-					<path fill-rule="evenodd" clip-rule="evenodd"
-						d="M27.5 0C12.3122 0 0 12.3122 0 27.5C0 42.6878 12.3122 55 27.5 55C42.6878 55 55 42.6878 55 27.5C55 12.3122 42.6878 0 27.5 0ZM28.0092 46H19L19.0001 34.9784L19 27.5803V24.4779C19 14.3752 24.0922 10 35.3733 10V17.5571C29.8894 17.5571 28.0092 19.4663 28.0092 24.4779V27.5803H36V34.9784H28.0092V46Z"
-						fill="url(#paint0_linear)"></path>
+			<a href="javascript:void(0);" class="brand-logo">
+				<svg class="logo-abbr" width="55" height="55" viewbox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path fill-rule="evenodd" clip-rule="evenodd" d="M27.5 0C12.3122 0 0 12.3122 0 27.5C0 42.6878 12.3122 55 27.5 55C42.6878 55 55 42.6878 55 27.5C55 12.3122 42.6878 0 27.5 0ZM28.0092 46H19L19.0001 34.9784L19 27.5803V24.4779C19 14.3752 24.0922 10 35.3733 10V17.5571C29.8894 17.5571 28.0092 19.4663 28.0092 24.4779V27.5803H36V34.9784H28.0092V46Z" fill="url(#paint0_linear)"></path>
 					<defs>
 					</defs>
 				</svg>
@@ -100,56 +99,6 @@
 
 						</div>
 						<ul class="navbar-nav header-right">
-							<!-- <li class="nav-item d-flex align-items-center">
-								<div class="input-group search-area">
-									<input type="text" class="form-control" placeholder="Search here...">
-									<span class="input-group-text"><a href="javascript:void(0)"><i
-												class="flaticon-381-search-2"></i></a></span>
-								</div>
-							</li>
-							<li class="nav-item dropdown notification_dropdown">
-								<a class="nav-link " href="javascript:void(0);">
-									<svg width="28" height="28" viewbox="0 0 28 28" fill="none"
-										xmlns="http://www.w3.org/2000/svg">
-										<path
-											d="M26.7727 10.8757C26.7043 10.6719 26.581 10.4909 26.4163 10.3528C26.2516 10.2146 26.0519 10.1247 25.8393 10.0929L18.3937 8.95535L15.0523 1.83869C14.9581 1.63826 14.8088 1.46879 14.6218 1.35008C14.4349 1.23137 14.218 1.16833 13.9965 1.16833C13.775 1.16833 13.5581 1.23137 13.3712 1.35008C13.1842 1.46879 13.0349 1.63826 12.9407 1.83869L9.59934 8.95535L2.15367 10.0929C1.9416 10.1252 1.74254 10.2154 1.57839 10.3535C1.41423 10.4916 1.29133 10.6723 1.22321 10.8757C1.15508 11.0791 1.14436 11.2974 1.19222 11.5065C1.24008 11.7156 1.34468 11.9075 1.49451 12.061L6.92067 17.6167L5.63734 25.4777C5.60232 25.6934 5.6286 25.9147 5.7132 26.1162C5.79779 26.3177 5.93729 26.4914 6.1158 26.6175C6.29432 26.7436 6.50466 26.817 6.72287 26.8294C6.94108 26.8418 7.15838 26.7926 7.35001 26.6875L14 23.0149L20.65 26.6875C20.8416 26.7935 21.0592 26.8434 21.2779 26.8316C21.4965 26.8197 21.7075 26.7466 21.8865 26.6205C22.0655 26.4944 22.2055 26.3204 22.2903 26.1186C22.3751 25.9167 22.4014 25.695 22.3662 25.4789L21.0828 17.6179L26.5055 12.061C26.6546 11.9071 26.7585 11.715 26.8056 11.5059C26.8527 11.2968 26.8413 11.0787 26.7727 10.8757Z"
-											fill="#717579"></path>
-									</svg>
-									<span class="badge light text-white bg-secondary rounded-circle">76</span>
-								</a>
-							</li>
-							<li class="nav-item dropdown notification_dropdown">
-								<a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
-									<svg width="28" height="28" viewbox="0 0 28 28" fill="none"
-										xmlns="http://www.w3.org/2000/svg">
-										<path
-											d="M23.3333 19.8333H23.1187C23.2568 19.4597 23.3295 19.065 23.3333 18.6666V12.8333C23.3294 10.7663 22.6402 8.75902 21.3735 7.12565C20.1068 5.49228 18.3343 4.32508 16.3333 3.80679V3.49996C16.3333 2.88112 16.0875 2.28763 15.6499 1.85004C15.2123 1.41246 14.6188 1.16663 14 1.16663C13.3812 1.16663 12.7877 1.41246 12.3501 1.85004C11.9125 2.28763 11.6667 2.88112 11.6667 3.49996V3.80679C9.66574 4.32508 7.89317 5.49228 6.6265 7.12565C5.35983 8.75902 4.67058 10.7663 4.66667 12.8333V18.6666C4.67053 19.065 4.74316 19.4597 4.88133 19.8333H4.66667C4.35725 19.8333 4.0605 19.9562 3.84171 20.175C3.62292 20.3938 3.5 20.6905 3.5 21C3.5 21.3094 3.62292 21.6061 3.84171 21.8249C4.0605 22.0437 4.35725 22.1666 4.66667 22.1666H23.3333C23.6428 22.1666 23.9395 22.0437 24.1583 21.8249C24.3771 21.6061 24.5 21.3094 24.5 21C24.5 20.6905 24.3771 20.3938 24.1583 20.175C23.9395 19.9562 23.6428 19.8333 23.3333 19.8333Z"
-											fill="#717579"></path>
-										<path
-											d="M9.9819 24.5C10.3863 25.2088 10.971 25.7981 11.6766 26.2079C12.3823 26.6178 13.1838 26.8337 13.9999 26.8337C14.816 26.8337 15.6175 26.6178 16.3232 26.2079C17.0288 25.7981 17.6135 25.2088 18.0179 24.5H9.9819Z"
-											fill="#717579"></path>
-									</svg>
-									<span class="badge light text-white bg-warning rounded-circle">12</span>
-								</a>
-								
-							</li>
-							<li class="nav-item dropdown notification_dropdown">
-								<a class="nav-link bell-link " href="javascript:void(0);">
-									<svg width="28" height="28" viewbox="0 0 28 28" fill="none"
-										xmlns="http://www.w3.org/2000/svg">
-										<path
-											d="M27.076 6.24662C26.962 5.48439 26.5787 4.78822 25.9955 4.28434C25.4123 3.78045 24.6679 3.50219 23.8971 3.5H4.10289C3.33217 3.50219 2.58775 3.78045 2.00456 4.28434C1.42137 4.78822 1.03803 5.48439 0.924011 6.24662L14 14.7079L27.076 6.24662Z"
-											fill="#717579"></path>
-										<path
-											d="M14.4751 16.485C14.3336 16.5765 14.1686 16.6252 14 16.6252C13.8314 16.6252 13.6664 16.5765 13.5249 16.485L0.875 8.30025V21.2721C0.875926 22.1279 1.2163 22.9484 1.82145 23.5536C2.42659 24.1587 3.24707 24.4991 4.10288 24.5H23.8971C24.7529 24.4991 25.5734 24.1587 26.1786 23.5536C26.7837 22.9484 27.1241 22.1279 27.125 21.2721V8.29938L14.4751 16.485Z"
-											fill="#717579"></path>
-									</svg>
-									<span class="badge light text-white bg-danger rounded-circle">76</span>
-								</a>
-							</li> -->
-
-
-
 							<li class="nav-item dropdown  header-profile">
 								<a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
 									<img src="../images/user.jpg" width="56" alt="">
@@ -176,9 +125,7 @@
 										<span class="ms-2">Inbox </span>
 									</a> -->
 									<a href="../signIn.php" class="dropdown-item ai-icon">
-										<svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger"
-											width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor"
-											stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 											<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
 											<polyline points="16 17 21 12 16 7"></polyline>
 											<line x1="21" y1="12" x2="9" y2="12"></line>
@@ -203,19 +150,19 @@
 		<div class="dlabnav">
 			<div class="dlabnav-scroll">
 				<ul class="metismenu" id="menu">
-					<li><a href="../SalesMarketingmodule/ceo_dashboard.php" aria-expanded="false">
+					<li><a href="../Ceomodule/ceo_dashboard" aria-expanded="false">
 							<i class="fas fa-home"></i>
 							<span class="nav-text">Dashboard</span>
 						</a>
 					</li>
 
-					<!-- <li><a href="javascript:void()" aria-expanded="false">
+					<li><a href="../Ceomodule/finance.php" aria-expanded="false">
 							<i class="fas fa-info-circle"></i>
 							<span class="nav-text">Finance</span>
-						</a> -->
+						</a>
 
-					<!-- </li> -->
-					<li><a href="../SalesMarketingmodule/sales.php" aria-expanded="false">
+					</li>
+					<li><a href="../Ceomodule/sales.php" aria-expanded="false">
 							<i class="fas fa-chart-line"></i>
 							<span class="nav-text">Sales</span>
 						</a>
@@ -228,7 +175,7 @@
                             <li><a href="chart-peity.html">Peity</a></li>
                         </ul> -->
 					</li>
-					<li><a href="../SalesMarketingmodule/marketing.php" aria-expanded="false">
+					<li><a href="../Ceomodule/marketing.php" aria-expanded="false">
 							<i class="fab fa-bootstrap"></i>
 							<span class="nav-text">Marketing</span>
 						</a>
@@ -252,27 +199,27 @@
 
                         </ul> -->
 					</li>
-					<!-- <li><a href="javascript:void()" aria-expanded="false">
+					<li><a href="../Ceomodule/operational.php" aria-expanded="false">
 							<i class="fas fa-table"></i>
 							<span class="nav-text">Operational</span>
-						</a> -->
+						</a>
 						<!-- <ul aria-expanded="false">
                             <li><a href="table-bootstrap-basic.html">Bootstrap</a></li>
                             <li><a href="table-datatable-basic.html">Datatable</a></li>
                         </ul> -->
-					<!-- </li> -->
-					<li><a href="../SalesMarketingmodule/fileUpload.php" aria-expanded="false">
+					</li>
+					<li><a href="../Ceomodule/fileUpload.php" aria-expanded="false">
 							<i class="fas fa-heart"></i>
 							<span class="nav-text">Files Upload</span>
 						</a>
 
 					</li>
-					<!-- <li><a href="addUser.php" class="" aria-expanded="false">
+					<li><a href="../Ceomodule/addUser.php" class="" aria-expanded="false">
 							<i class="fas fa-user-check"></i>
 							<span class="nav-text">Add User</span>
 						</a>
-					</li> -->
-					<li><a href="../SalesMarketingmodule/emailCompose.php" aria-expanded="false">
+					</li>
+					<li><a href="../Ceomodule/emailCompose.php" aria-expanded="false">
 							<i class="fas fa-file-alt"></i>
 							<span class="nav-text">Send Email</span>
 						</a>
@@ -289,7 +236,7 @@
 							<i class="fas fa-clone"></i>
 							<span class="nav-text">Pages</span>
 						</a> -->
-						<!-- <ul aria-expanded="false">
+					<!-- <ul aria-expanded="false">
                             <li><a href="page-login.html">Login</a></li>
                             <li><a href="page-register.html">Register</a></li>
                             <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Error</a>
@@ -305,13 +252,13 @@
                             <li><a href="empty-page.html">Empty Page</a></li>
                         </ul> 
                     </li>-->
-                </ul>
+				</ul>
 
 
-						<!-- <div class="copyright">
-							<p><strong>Felix CEO dashboard</strong> © 2023 All Rights Reserved</p>
-							<p class="fs-12">Made with aron2k02</p>
-						</div> -->
+				<div class="copyright">
+					<p><strong>Felix CEO dashboard</strong> © 2023 All Rights Reserved</p>
+					<p class="fs-12">Made with aron2k02</p>
+				</div>
 
 			</div>
 		</div>
@@ -328,8 +275,8 @@
 
 				<div class="row page-titles">
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item active"><a href="../SalesMarketingmodule/ceo_dashboard.php">Dashboard</a></li>
-						<li class="breadcrumb-item"><a href="../SalesMarketingmodule/emailCompose.php">Email</a></li>
+						<li class="breadcrumb-item active"><a href="../Ceomodule/ceo_dashboard.php">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="../Ceomodule/emailCompose.php">Email</a></li>
 					</ol>
 				</div>
 
@@ -338,43 +285,31 @@
 					<div class="col-lg-12">
 						<div class="card">
 							<div class="card-body">
-
-
 								<div class="compose-content">
-									<form action="sendEmail.php" method="post" enctype="multipart/form-data">
+									<form id="emailForm" enctype="multipart/form-data">
 										<div class="mb-3">
-											<input type="text" name="From" id="toField"
-												class="form-control bg-transparent"
-												placeholder=" From:"><!--extra added to fill the from address-->
+											<input type="text" name="to" id="toField" class="form-control bg-transparent" placeholder=" To:" required data-parsley-trigger="change">
 										</div>
 										<div class="mb-3">
-											<input type="text" name="to" id="toField"
-												class="form-control bg-transparent" placeholder=" To:">
+											<input type="text" name="subject" id="subject" class="form-control bg-transparent" placeholder=" Subject:" required data-parsley-trigger="change">
 										</div>
 										<div class="mb-3">
-											<input type="text" name="subject" id="subject"
-												class="form-control bg-transparent" placeholder=" Subject:">
-										</div>
-										<div class="mb-3">
-											<textarea id="email-compose-editor" name="body"
-												class="textarea_editor form-control bg-transparent emailBody" rows="15"
-												placeholder="Enter text ..."></textarea>
+											<textarea id="email-compose-editor" name="body" class="textarea_editor form-control bg-transparent emailBody" rows="15" placeholder="Enter text ..." required data-parsley-trigger="change"></textarea>
 										</div>
 
 										<h5 class="mb-4"><i class="fa fa-paperclip"></i> Attachment</h5>
 										<div class="input-group mb-3">
 											<!-- <button class="btn btn-primary btn-sm" type="button">Button</button> -->
 											<div class="form-file">
-												<input type="file" class="form-file-input form-control">
+												<input id="attachmentFile" name="attachmentFile[]" type="file" class="form-file-input form-control" data-parsley-trigger="change" data-parsley-mime-type="text/csv|application/vnd.ms-excel" multiple>
 											</div>
 										</div>
-
+										<div class="text-start mt-4 mb-3">
+											<button class="btn btn-primary btn-sl-sm me-2" type="submit" id="sendEmailBtn"><span class="me-2"><i class="fa fa-paper-plane"></i></span>Send</button>
+										</div>
+									</form>
+									<div id="Result"></div>
 								</div>
-								<div class="text-start mt-4 mb-3">
-									<button class="btn btn-primary btn-sl-sm me-2" type="submit" id="sendEmailBtn"><span
-											class="me-2"><i class="fa fa-paper-plane"></i></span>Send</button>
-								</div>
-								</form>
 							</div>
 						</div>
 					</div>
@@ -394,7 +329,7 @@
         ***********************************-->
 	<div class="footer">
 		<div class="copyright">
-			<p>Copyright © Designed &amp;Developed by  aron2k23</p>
+			<p>Copyright © Designed &amp; Developed by aron2k23</p>
 		</div>
 	</div>
 	<!--**********************************
@@ -417,77 +352,75 @@
 	<script src="../js/dlabnav-init.js"></script>
 	<script src="../js/demo.js"></script>
 	<script src="../js/styleSwitcher.js"></script>
+	<!-- Parsley.js for form validation -->
+	<script src="/ceo_dashboard/parsley.js"></script>
 	<script>
+		$(document).ready(function() {
 
-		$(document).ready(function () {
-			$('#sendEmailBtn').click(function (e) {
-				e.preventDefault();
-				var emailBody = $('.emailBody').val();
-				var subject = $('#subject').val();
-				var toField = $('#toField').val();
-				console.log(`${emailBody} ${subject} ${toField}`);
-				$.ajax({
-					url: 'functions.php',
-					type: 'POST',
-					data: {
-						emailBody: emailBody,
-						subject: subject,
-						toField: toField,
-						Function: 'sendEmail',
-					},
-					success: function (response) {
-						console.log(response);
-						if (response == 'OK') {
+			$(function() {
+				$('#emailForm').parsley().on('field:validated', function() {
+						var ok = $('.parsley-error').length === 0;
+						$('.bs-callout-info').toggleClass('hidden', !ok);
+						$('.bs-callout-warning').toggleClass('hidden', ok);
+					})
+					.on('form:submit', function() {
+						return false; // Don't submit form for this demo
+					});
+			});
 
-						}
-					}
-				})
-			})
-			$('#createStudentForm').submit(function (e) {
-				e.preventDefault();
+			$('#emailForm').submit(function(e) {
+				if ($('#emailForm').parsley().isValid()) {
 
-				//  Acquiring values from the input fields from create faculty form
+					e.preventDefault();
+					var emailBody = $('.emailBody').val();
+					var subject = $('#subject').val();
+					var toField = $('#toField').val();
+					var formData = new FormData(this);
+					formData.append('emailBody', emailBody);
+					formData.append('toField', toField);
+					formData.append('subject', subject);
+					formData.append('Function', 'sendEmail');
+					console.log(`${emailBody} ${subject} ${toField}`);
 
-
+					var fileSize = 0;
+					var attachmentFile = $("#attachmentFile").val(); // Note: File input values are not directly accessible due to security reasons
 
 
-				// Student details
-				var fileSize = 0;
-				var studentProfilePic = $("#studentProfilePic").val(); // Note: File input values are not directly accessible due to security reasons
-
-				last_name = last_name + " " + Initials;
-
-
-				// Logic for checking the size of the image file being uploaded
-				if ($("#studentProfilePic").val() !== '') {
 					// Logic for checking the size of the image file being uploaded
-					var fileSize = ($("#studentProfilePic")[0].files[0].size / 1024);
-					fileSize = (Math.round(fileSize * 100) / 100);
-				}
-				setTimeout(function () {
-					if (fileSize <= 800) {
-						$.ajax({
-							url: 'ajax/upload.php',
-							type: 'POST',
-							data: formData,
-							success: function (response) {
-								console.log(response);
-								if (response == "OK") {
-
-								} else {
-									$("#Result").html(`<div class="alert alert-danger fade show" role="alert"> ${response}</div>`);
-								}
-								setTimeout(function () {
-									$("#Result").html('');
-								}, 1000);
-
-							}
-						});
-						console.log('Good to upload~!');
-					} else {
-						$("#Result").html(`<div class="alert alert-danger fade show" role="alert"> File size has to be within 800kb</div>`);
+					if ($("#attachmentFile").val() !== '') {
+						// Logic for checking the size of the image file being uploaded
+						var fileSize = ($("#attachmentFile")[0].files[0].size / 1024);
+						fileSize = (Math.round(fileSize * 100) / 100);
 					}
-				}, 1000);
+
+					setTimeout(function() {
+						if (fileSize <= 800) {
+							$.ajax({
+								url: '../functions.php',
+								type: 'POST',
+								data: formData,
+								processData: false,
+								contentType: false,
+								success: function(response) {
+									response = JSON.parse(response);
+									console.log(response);
+									if (response[0] == "OK") {
+										$("#Result").html(`<div class="alert alert-success fade show" role="alert"> Email sent Successfully! </div>`);
+									} else {
+										$("#Result").html(`<div class="alert alert-danger fade show" role="alert"> ${response}</div>`);
+									}
+									setTimeout(function() {
+										$("#Result").html('');
+									}, 1000);
+
+								}
+							});
+							console.log('Good to upload~!');
+						} else {
+							$("#Result").html(`<div class="alert alert-danger fade show" role="alert"> File size has to be within 800kb</div>`);
+						}
+					}, 1000);
+				}
 			});
 		})
 	</script>

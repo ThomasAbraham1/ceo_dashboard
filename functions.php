@@ -115,7 +115,7 @@ if ($_POST['Function']) {
                 $_SESSION["userId"] = $userId;
                 // close database connection
                 mysqli_close($conn);
-                return $designation;
+                return "OK/".$designation;
             }
             echo signUp($userName, $password);
         }
@@ -186,7 +186,7 @@ if (isset($_POST['Function'])) {
                 $mail->Subject = "$subject";
                 $mail->Body    = "$emailBody";
                 $mail->AltBody = "-";
-                $mail->send();
+                $mail->send(); 
                 $emailResult = 'Mail has been successfully sent!';
             } catch (Exception $e) {
                 $emailResult = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";

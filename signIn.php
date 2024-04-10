@@ -106,7 +106,7 @@ include 'config.php';
                       <input type="password" id="password" name="password" class="form-control" required data-parsley-trigger="change" data-parsley-minlength="8" data-parsley-pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$" data-parsley-pattern-message="The password must include at least 1 upper case letter, 8 characters and a symbol" data-parsley-required />
                     </div>
                     <div class="row d-flex justify-content-between mt-4 mb-2">
-                      <!-- <div class="mb-3">
+                      <!-- <div class="mb-3"> 
                         <div class="form-check custom-checkbox ms-1">
                           <input type="checkbox" class="form-check-input" id="basic_checkbox_1" />
                           <label class="form-check-label" for="basic_checkbox_1">Remember my preference</label>
@@ -171,23 +171,22 @@ include 'config.php';
             },
             success: function(response) {
               console.log(response);
-              if (response == "OK") {
+              response = response.split('/');
+              responseMsg = response[0];
+              designation = response[1];
+              if (responseMsg == "OK") {
                 $("#Result").html(`<div class="alert alert-success fade show" role="alert"> Successfully Signed In! </div>`);
-                // window.location.href = "./Ceomodule/ceo_dashboard.php";
-              } else {
-                if (response == "finance") {
+                if (designation == "finance") {
                   window.location.href = "./Financemodule/ceo_dashboard.php";
-
-                }
-                elseif(response == "salesAndMarketing") {
+                } else if (designation == "salesAndMarketing") {
                   window.location.href = "./SalesMarketingmodule/ceo_dashboard.php";
 
-                }
-                elseif(response == "operation") {
+                } else if (designation == "operation") {
                   window.location.href = "./Operationalmodule/ceo_dashboard.php";
-
                 }
-                // $("#Result").html(`<div class="alert alert-danger fade show" role="alert"> ${response}</div>`);
+                // window.location.href = "./Ceomodule/ceo_dashboard.php";
+              } else {
+                $("#Result").html(`<div class="alert alert-danger fade show" role="alert"> ${response}</div>`);
               }
             }
           })
