@@ -149,7 +149,7 @@
     <!-- Parsley.js for form validation -->
     <script src="/ceo_dashboard/parsley.js"></script>
     <!--hide show password icon-->
-    <script>
+    <!-- <script>
         var a;
 
         function pass1() {
@@ -178,7 +178,7 @@
                 a = 1;
             }
         }
-    </script>
+    </script> -->
     <!--hide show password icon-->
     <script>
         $(document).ready(function(e) {

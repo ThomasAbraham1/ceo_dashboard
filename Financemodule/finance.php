@@ -1,80 +1,55 @@
 <?php
 include '../config.php';
-$sql1 = "SELECT AVG(revenue) AS average_revenue FROM financial_data";
-$sql2 = "SELECT AVG(expenses) AS expenses FROM financial_data";
-$sql3 = "SELECT AVG(taxes) AS taxes FROM financial_data";
-$sql4 = "SELECT AVG(cogs) AS cogs FROM financial_data";
+$sql = "SELECT month, roi FROM financial_data GROUP BY month";
+$result = $conn->query($sql);
 
-global $average_revenue, $expenses, $taxes, $cogs;
-$result1 = $conn->query($sql1);
-if ($result1) {
-	$row = $result1->fetch_assoc();
-	$average_revenue = $row['average_revenue'];
-}
-$result2 = $conn->query($sql2);
+// Arrays to store month, taxes, and roi data
+$months = array();
+$roi = array();
 
-if ($result2) {
-	$row = $result2->fetch_assoc();
-	$expenses = $row['expenses'];
-}
-$result3 = $conn->query($sql3);
-
-if ($result3) {
-	$row = $result3->fetch_assoc();
-	$taxes = $row['taxes'];
-}
-$result4 = $conn->query($sql4);
-
-if ($result4) {
-	$row = $result4->fetch_assoc();
-	$cogs = $row['cogs'];
-}
-
-// Fetch data for chart 1 (net income)
-$sql_chart1 = "SELECT date, net_income FROM financial_data";
-$result_chart1 = $conn->query($sql_chart1);
-
-// Initialize arrays to store data
-$dates = [];
-$net_incomes = [];
-
-// Fetch data and store it in arrays
-if ($result_chart1) {
-	if ($result_chart1->num_rows > 0) {
-		while ($row = $result_chart1->fetch_assoc()) {
-			$dates[] = $row['date'];
-			$net_incomes[] = $row['net_income'];
-		}
-	} else {
-		echo "No data available for chart 1.";
+// Fetching data
+if ($result->num_rows > 0) {
+	while ($row = $result->fetch_assoc()) {
+		// Extracting month, taxes, and roi
+		$months[] = $row['month'];
+		$roi[] = $row['roi'];
 	}
 } else {
-	echo "Error executing query for chart 1: " . $conn->error;
+	echo "0 results";
+}
+
+$sql2 = "SELECT AVG(taxes) AS avg_taxes, AVG(cogs) AS avg_cogs FROM financial_data";
+$result = $conn->query($sql2);
+
+// Fetching data
+if ($result->num_rows > 0) {
+	$row = $result->fetch_assoc();
+	$avgTaxes = $row['avg_taxes'];
+	$avgCOGS = $row['avg_cogs'];
+} else {
+	$avgTaxes = 0;
+	$avgCOGS = 0;
 }
 
 
-// Fetch data for chart 2 (payable and receivable)
-$sql_chart2 = "SELECT accounts_payable, accounts_receiveble FROM financial_data";
-$result_chart2 = $conn->query($sql_chart2);
 
-// Initialize variables for total amounts
-$total_payable = 0;
-$total_receivable = 0;
+$sql3 = "SELECT month, net_income FROM financial_data ORDER BY month ASC";
+$result = $conn->query($sql3);
 
-// Fetch data and calculate totals
-if ($result_chart2) {
-	if ($result_chart2->num_rows > 0) {
-		while ($row = $result_chart2->fetch_assoc()) {
-			$total_payable += $row['accounts_payable'];
-			$total_receivable += $row['accounts_receiveble'];
-		}
-	} else {
-		echo "No data available for chart 2.";
+// Arrays to store month and net income data
+$months = array();
+$netIncome = array();
+
+// Fetching data
+if ($result->num_rows > 0) {
+	while ($row = $result->fetch_assoc()) {
+		// Extracting month and net income
+		$months[] = $row['month'];
+		$netIncome[] = $row['net_income'];
 	}
 } else {
-	echo "Error executing query for chart 2: " . $conn->error;
+	echo "0 results";
 }
-
 
 ?>
 
@@ -105,6 +80,7 @@ if ($result_chart2) {
 	<link href="../vendor/dropzone/dist/dropzone.css" rel="stylesheet">
 	<link href="../css/style.css" rel="stylesheet">
 	<link rel="stylesheet" href="../css/fileUploadstyle.css">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
 </head>
@@ -204,63 +180,32 @@ if ($result_chart2) {
 		<div class="dlabnav">
 			<div class="dlabnav-scroll">
 				<ul class="metismenu" id="menu">
-					<li><a href="../Ceomodule/ceo_dashboard.php" aria-expanded="false">
+					<li><a href="../Financemodule/ceo_dashboard.php" aria-expanded="false">
 							<i class="fas fa-home"></i>
 							<span class="nav-text">Dashboard</span>
 						</a>
 					</li>
 
-					<li><a href="../Ceomodule/finance.php" aria-expanded="false">
+					<li><a href="../Financemodule/finance.php" aria-expanded="false">
 							<i class="fas fa-info-circle"></i>
 							<span class="nav-text">Finance</span>
 						</a>
 
 					</li>
-					<li><a href="../Ceomodule/sales.php" aria-expanded="false">
-							<i class="fas fa-chart-line"></i>
-							<span class="nav-text">Sales</span>
-						</a>
 
-					</li>
-					<li><a href="../Ceomodule/marketing.php" aria-expanded="false">
-							<i class="fab fa-bootstrap"></i>
-							<span class="nav-text">Marketing</span>
-						</a>
-
-					</li>
-					<li><a href="../Ceomodule/operational.php" aria-expanded="false">
-							<i class="fas fa-table"></i>
-							<span class="nav-text">Operational</span>
-						</a>
-
-					</li>
-					<li><a href="../Ceomodule/fileUpload.php" aria-expanded="false">
+					<li><a href="../Financemodule/fileUpload.php" aria-expanded="false">
 							<i class="fas fa-heart"></i>
 							<span class="nav-text">Files Upload</span>
 						</a>
 
 					</li>
-					<li><a href="../Ceomodule/addUser.php" class="" aria-expanded="false">
-							<i class="fas fa-user-check"></i>
-							<span class="nav-text">Add User</span>
-						</a>
-					</li>
-					<li><a href="../Ceomodule/email-compose.php" aria-expanded="false">
+
+					<li><a href="../Financemodule/emailCompose.php" aria-expanded="false">
 							<i class="fas fa-file-alt"></i>
 							<span class="nav-text">Send Email</span>
 						</a>
 
 					</li>
-
-					<li><a href="javascript:void()" aria-expanded="false">
-							<i class="fas fa-clone"></i>
-							<span class="nav-text">Pages</span>
-						</a>
-
-						<!-- <div class="copyright">
-							<p><strong>Felix CEO dashboard</strong> © 2023 All Rights Reserved</p>
-							<p class="fs-12">Made with aron2k02</p>
-						</div> -->
 
 			</div>
 		</div>
@@ -272,53 +217,32 @@ if ($result_chart2) {
             Content body start
         ***********************************-->
 		<div class="content-body">
-			<div class="container-fluid" style="display: flex; justify-content: space-evenly;">
-
-				<div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6 ">
-					<div class="widget-stat card">
-						<div class="card-body p-4">
-							<div class="media ai-icon">
-								<span class="me-3 bgl-primary text-primary">
-									<!--	<i class="ti-user"></i> -->
-									<svg id="icon-customers" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
-										<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-										<circle cx="12" cy="7" r="4"></circle>
-									</svg>
-								</span>
-								<div class="media-body">
-									<p class="mb-1">Revenue</p>
-									<h4 class="mb-0"><?php echo "$" . number_format($average_revenue, 2); ?></h4>
-									<!-- <span class="badge badge-primary">+3.5%</span> -->
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
-					<div class="widget-stat card">
-						<div class="card-body p-4">
-							<div class="media ai-icon">
-								<span class="me-3 bgl-warning text-warning">
-									<svg id="icon-orders" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
-										<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-										<polyline points="14 2 14 8 20 8"></polyline>
-										<line x1="16" y1="13" x2="8" y2="13"></line>
-										<line x1="16" y1="17" x2="8" y2="17"></line>
-										<polyline points="10 9 9 9 8 9"></polyline>
-									</svg>
-								</span>
-								<div class="media-body">
-									<p class="mb-1">Expenses</p>
-									<h4 class="mb-0"><?php echo "$" . number_format($expenses, 2)  ?></h4>
-									<!-- <span class="badge badge-warning">+3.5%</span> -->
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
+			<div class="container-fluid">
 				<div class="row">
-					<div class="col-xl-12 col-xxl-6 col-lg-6 col-sm-6">
+
+					<div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
+						<div class="widget-stat card">
+							<div class="card-body p-4">
+								<div class="media ai-icon">
+									<span class="me-3 bgl-warning text-warning">
+										<svg id="icon-orders" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+											<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+											<polyline points="14 2 14 8 20 8"></polyline>
+											<line x1="16" y1="13" x2="8" y2="13"></line>
+											<line x1="16" y1="17" x2="8" y2="17"></line>
+											<polyline points="10 9 9 9 8 9"></polyline>
+										</svg>
+									</span>
+									<div class="media-body">
+										<p class="mb-1"> COGS </p>
+										<h4 class="mb-0"> $<?php echo number_format($avgCOGS, 2); ?></h4>
+										<span class="badge badge-warning">Avg</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
 						<div class="widget-stat card">
 							<div class="card-body  p-4">
 								<div class="media ai-icon">
@@ -329,59 +253,123 @@ if ($result_chart2) {
 										</svg>
 									</span>
 									<div class="media-body">
-										<p class="mb-1">Tax</p>
-										<h4 class="mb-0"><?php echo "$" . number_format($taxes, 2) ?></h4>
-										<!-- <span class="badge badge-danger">-3.5%</span> -->
+										<p class="mb-1">Taxes</p>
+										<h4 class="mb-0"> $<?php echo number_format($avgTaxes, 2); ?></h4>
+										<span class="badge badge-primary">Per Month</span>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-xl-12 col-xxl-6 col-lg-6 col-sm-6">
-						<div class="widget-stat card">
-							<div class="card-body  p-4">
-								<div class="media ai-icon">
-									<span class="me-3 bgl-danger text-danger">
-										<svg id="icon-customers" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
-											<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-											<circle cx="12" cy="7" r="4"></circle>
-										</svg>
-									</span>
-									<div class="media-body">
-										<p class="mb-1">COGS</p>
-										<h4 class="mb-0"><?php echo number_format($cogs, 2) . "%" ?></h4>
-										<!-- <span class="badge badge-danger">-3.5%</span> -->
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xl-6 col-lg-12 col-sm-12">
-							<div class="card">
-								<div class="card-header">
-									<h4 class="card-title">Net Income</h4>
-								</div>
-								<div class="card-body">
-									<canvas id="chart1"></canvas>
 
-								</div>
+					<!-- <div class="col-xl-12 col-xxl-6 col-lg-6 col-sm-6">
+					<div class="widget-stat card">
+						<div class="card-body  p-4">
+							<div class="media ai-icon">
+								<span class="me-3 bgl-danger text-danger">
+									<svg id="icon-customers" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
+										<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+										<circle cx="12" cy="7" r="4"></circle>
+									</svg>
+								</span>
+								<div class="media-body">
+									<p class="mb-1">COGS</p>
+									<h4 class="mb-0">
+										 <?php //echo number_format($cogs, 2) . "%" 
+											?> 
+									</h4>
+									 <span class="badge badge-danger">-3.5%</span> -->
+				</div>
+				<div class="row">
+					<div class="col-xl-4 col-xxl-6 col-lg-6">
+						<div class="card">
+							<div class="card-header">
+								<h4 class="card-title">Return on Investment per month</h4>
+							</div>
+							<div class="card-body">
+								<canvas id="myChart" width="400" height="400"></canvas>
+
+								<script>
+									var ctx = document.getElementById('myChart').getContext('2d');
+									var myChart = new Chart(ctx, {
+										type: 'line',
+										data: {
+											labels: <?php echo json_encode($months); ?>,
+											datasets: [{
+												label: 'ROI',
+												data: <?php echo json_encode($roi); ?>,
+												fill: false,
+												borderColor: 'rgba(54, 162, 235, 1)',
+												backgroundColor: 'rgba(54, 162, 235, 0.2)',
+												yAxisID: 'y-axis-1'
+											}]
+										},
+										options: {
+											scales: {
+												yAxes: [{
+													type: 'linear',
+													display: true,
+													position: 'left',
+													id: 'y-axis-1',
+													scaleLabel: {
+														display: true,
+														labelString: 'ROI'
+													}
+												}]
+											}
+										}
+									});
+								</script>
+
 							</div>
 						</div>
-						<div class="col-xl-6 col-lg-12 col-sm-12">
-							<div class="card">
-								<div class="card-header">
-									<h4 class="card-title">Amount Receivable VS Amount Payable</h4>
-								</div>
-								<div class="card-body">
-									<canvas id="chart2"></canvas>
-								</div>
+					</div>
+					<div class="col-xl-4 col-xxl-6 col-lg-6">
+						<div class="card">
+							<div class="card-header">
+								<h4 class="card-title">Net Income</h4>
+							</div>
+							<div class="card-body">
+								<canvas id="netIncomeChart" width="400" height="400"></canvas>
+
+								<script>
+									var ctx = document.getElementById('netIncomeChart').getContext('2d');
+									var myChart = new Chart(ctx, {
+										type: 'radar', // Change chart type to 'radar'
+										data: {
+											labels: <?php echo json_encode($months); ?>,
+											datasets: [{
+												label: 'Net Income',
+												data: <?php echo json_encode($netIncome); ?>,
+												backgroundColor: 'rgba(75, 192, 192, 0.2)', // Fill color of the area under the radar
+												borderColor: 'rgba(75, 192, 192, 1)', // Border color of the radar
+												borderWidth: 1
+											}]
+										},
+										options: {
+											scales: {
+												r: {
+													angleLines: {
+														display: true
+													},
+													ticks: {
+														beginAtZero: true
+													}
+												}
+											}
+										}
+									});
+								</script>
+
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+
+
+
 		<!-- </div> -->
 
 		<!--**********************************
@@ -434,37 +422,7 @@ if ($result_chart2) {
 	<script src="../vendor/chart.js/Chart.bundle.min.js"></script>
 	<script src="../js/plugins-init/chartjs-init.js"></script>
 	<script>
-		// JavaScript code to create the line graph using Chart.js
-		var ctx = document.getElementById('chart1').getContext('2d');
-		var myChart = new Chart(ctx, {
-			type: 'line',
-			data: {
-				labels: <?php echo json_encode($dates); ?>, // Dates as y-axis
-				datasets: [{
-					label: 'Net Income', // Legend label
-					data: <?php echo json_encode($net_incomes); ?>, // Net Income as x-axis
-					backgroundColor: 'rgba(54, 162, 235, 0.2)', // Background color of the line
-					borderColor: 'rgba(54, 162, 235, 1)', // Border color of the line
-					borderWidth: 1 // Border width
-				}]
-			},
-			options: {
-				scales: {
-					yAxes: [{
-						scaleLabel: {
-							display: true,
-							labelString: 'Date' // Label for y-axis
-						}
-					}],
-					xAxes: [{
-						scaleLabel: {
-							display: true,
-							labelString: 'Net Income' // Label for x-axis
-						}
-					}]
-				}
-			}
-		});
+		// to year and expenses
 	</script>
 	<script>
 		// JavaScript code to create the line chart using Chart.js

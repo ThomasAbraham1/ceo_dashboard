@@ -257,10 +257,10 @@ if ($result_chart2) {
 							<span class="nav-text">Pages</span>
 						</a>
 
-						<div class="copyright">
+						<!-- <div class="copyright">
 							<p><strong>Felix CEO dashboard</strong> © 2023 All Rights Reserved</p>
 							<p class="fs-12">Made with aron2k02</p>
-						</div>
+						</div> -->
 
 			</div>
 		</div>

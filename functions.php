@@ -107,13 +107,15 @@ if ($_POST['Function']) {
                 while ($row = mysqli_fetch_assoc($result)) {
                     $userId = $row["username"];
                     $passwordFromDatabase = $row["password"];
+                    $designation = $row['designation'];
                 }
+                
                 if (mysqli_num_rows($result) == 0) return "Account doesn't exit, please sign up!";
                 if ($password != $passwordFromDatabase) return "Password incorrect!";
                 $_SESSION["userId"] = $userId;
                 // close database connection
                 mysqli_close($conn);
-                return "OK";
+                return $designation;
             }
             echo signUp($userName, $password);
         }
@@ -146,7 +148,7 @@ if (isset($_POST['Function'])) {
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
                 $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
                 //Recipients
-                $mail->setFrom('saron9291@gmail.com', 'CEO - HYDRA');
+                $mail->setFrom('saron9291@gmail.com', 'CEO - FELIX.CO');
                 $mail->addAddress($toField, 'Staff');     //Add a recipient
                 // $mail->addReplyTo('info@example.com', 'Information');
                 //Attachments

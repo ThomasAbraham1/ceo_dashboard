@@ -1,3 +1,68 @@
+<?php
+include '../config.php';
+
+$query_revenue = "SELECT AVG(Revenue) AS avg_revenue FROM salesmarketing_data";
+
+// Execute the query for average revenue
+$result_revenue = $conn->query($query_revenue);
+$row_revenue = $result_revenue->fetch_assoc();
+$avg_revenue = $row_revenue['avg_revenue'];
+
+// Query to calculate average CPA
+$query_cpa = "SELECT AVG(CPA) AS avg_cpa FROM salesmarketing_data";
+
+// Execute the query for average CPA
+$result_cpa = $conn->query($query_cpa);
+$row_cpa = $result_cpa->fetch_assoc();
+$avg_cpa = $row_cpa['avg_cpa'];
+
+// Query to calculate average market share
+$query_market_share = "SELECT AVG(`Market_share`) AS avg_market_share FROM salesmarketing_data";
+
+//Execute the query for average market share
+$result_market_share = $conn->query($query_market_share);
+$row_market_share = $result_market_share->fetch_assoc();
+$avg_market_share = $row_market_share['avg_market_share'];
+
+
+
+
+$query2 = "SELECT month, Impressions FROM salesmarketing_data";
+
+// Execute the query
+$result = $conn->query($query2);
+
+// Initialize arrays to store labels and data for the bar chart
+$labels = [];
+$impressions = [];
+
+// Fetch the results
+while ($row = $result->fetch_assoc()) {
+	$labels[] = $row['month'];
+	$impressions[] = $row['Impressions'];
+}
+
+
+
+$query3 = "SELECT `Brand_awareness`, COUNT(*) AS count FROM salesmarketing_data GROUP BY `Brand_awareness`";
+
+// Execute the query
+$result3 = $conn->query($query3);
+
+// Initialize arrays to store labels and data for the doughnut chart
+$labels3 = [];
+$counts3 = [];
+
+// Fetch the results
+while ($row = $result3->fetch_assoc()) {
+	$labels3[] = ucfirst($row['Brand_awareness']);
+	$counts3[] = $row['count'];
+}
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,10 +83,13 @@
 	<title>Admin Dashboard</title>
 
 	<!-- FAVICONS ICON -->
-	<link rel="shortcut icon" type="image/png" href="../images/favicon.png">
+	<link rel="shortcut icon" type="image/png" href="images/favicon.png">
 	<link href="../vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
 	<link href="../vendor/dropzone/dist/dropzone.css" rel="stylesheet">
 	<link href="../css/style.css" rel="stylesheet">
+	<link rel="stylesheet" href="../css/fileUploadstyle.css">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 </head>
 
@@ -80,44 +148,12 @@
 					<div class="collapse navbar-collapse justify-content-between">
 						<div class="header-left">
 							<div class="dashboard_bar">
-								Marketing Dashboard
+								Dashboard
 							</div>
 
 						</div>
 						<ul class="navbar-nav header-right">
-							<!--	<li class="nav-item d-flex align-items-center">
-								<div class="input-group search-area">
-									<input type="text" class="form-control" placeholder="Search here...">
-									<span class="input-group-text"><a href="javascript:void(0)"><i class="flaticon-381-search-2"></i></a></span>
-								</div>
-							</li>
-							<li class="nav-item dropdown notification_dropdown">
-								<a class="nav-link " href="javascript:void(0);">
-									<svg width="28" height="28" viewbox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<path d="M26.7727 10.8757C26.7043 10.6719 26.581 10.4909 26.4163 10.3528C26.2516 10.2146 26.0519 10.1247 25.8393 10.0929L18.3937 8.95535L15.0523 1.83869C14.9581 1.63826 14.8088 1.46879 14.6218 1.35008C14.4349 1.23137 14.218 1.16833 13.9965 1.16833C13.775 1.16833 13.5581 1.23137 13.3712 1.35008C13.1842 1.46879 13.0349 1.63826 12.9407 1.83869L9.59934 8.95535L2.15367 10.0929C1.9416 10.1252 1.74254 10.2154 1.57839 10.3535C1.41423 10.4916 1.29133 10.6723 1.22321 10.8757C1.15508 11.0791 1.14436 11.2974 1.19222 11.5065C1.24008 11.7156 1.34468 11.9075 1.49451 12.061L6.92067 17.6167L5.63734 25.4777C5.60232 25.6934 5.6286 25.9147 5.7132 26.1162C5.79779 26.3177 5.93729 26.4914 6.1158 26.6175C6.29432 26.7436 6.50466 26.817 6.72287 26.8294C6.94108 26.8418 7.15838 26.7926 7.35001 26.6875L14 23.0149L20.65 26.6875C20.8416 26.7935 21.0592 26.8434 21.2779 26.8316C21.4965 26.8197 21.7075 26.7466 21.8865 26.6205C22.0655 26.4944 22.2055 26.3204 22.2903 26.1186C22.3751 25.9167 22.4014 25.695 22.3662 25.4789L21.0828 17.6179L26.5055 12.061C26.6546 11.9071 26.7585 11.715 26.8056 11.5059C26.8527 11.2968 26.8413 11.0787 26.7727 10.8757Z" fill="#717579"></path>
-									</svg>
-									<span class="badge light text-white bg-secondary rounded-circle">76</span>
-								</a>
-							</li>
-							<li class="nav-item dropdown notification_dropdown">
-								<a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
-									<svg width="28" height="28" viewbox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<path d="M23.3333 19.8333H23.1187C23.2568 19.4597 23.3295 19.065 23.3333 18.6666V12.8333C23.3294 10.7663 22.6402 8.75902 21.3735 7.12565C20.1068 5.49228 18.3343 4.32508 16.3333 3.80679V3.49996C16.3333 2.88112 16.0875 2.28763 15.6499 1.85004C15.2123 1.41246 14.6188 1.16663 14 1.16663C13.3812 1.16663 12.7877 1.41246 12.3501 1.85004C11.9125 2.28763 11.6667 2.88112 11.6667 3.49996V3.80679C9.66574 4.32508 7.89317 5.49228 6.6265 7.12565C5.35983 8.75902 4.67058 10.7663 4.66667 12.8333V18.6666C4.67053 19.065 4.74316 19.4597 4.88133 19.8333H4.66667C4.35725 19.8333 4.0605 19.9562 3.84171 20.175C3.62292 20.3938 3.5 20.6905 3.5 21C3.5 21.3094 3.62292 21.6061 3.84171 21.8249C4.0605 22.0437 4.35725 22.1666 4.66667 22.1666H23.3333C23.6428 22.1666 23.9395 22.0437 24.1583 21.8249C24.3771 21.6061 24.5 21.3094 24.5 21C24.5 20.6905 24.3771 20.3938 24.1583 20.175C23.9395 19.9562 23.6428 19.8333 23.3333 19.8333Z" fill="#717579"></path>
-										<path d="M9.9819 24.5C10.3863 25.2088 10.971 25.7981 11.6766 26.2079C12.3823 26.6178 13.1838 26.8337 13.9999 26.8337C14.816 26.8337 15.6175 26.6178 16.3232 26.2079C17.0288 25.7981 17.6135 25.2088 18.0179 24.5H9.9819Z" fill="#717579"></path>
-									</svg>
-									<span class="badge light text-white bg-warning rounded-circle">12</span>
-								</a>
 
-							</li>
-							<li class="nav-item dropdown notification_dropdown">
-								<a class="nav-link bell-link " href="javascript:void(0);">
-									<svg width="28" height="28" viewbox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<path d="M27.076 6.24662C26.962 5.48439 26.5787 4.78822 25.9955 4.28434C25.4123 3.78045 24.6679 3.50219 23.8971 3.5H4.10289C3.33217 3.50219 2.58775 3.78045 2.00456 4.28434C1.42137 4.78822 1.03803 5.48439 0.924011 6.24662L14 14.7079L27.076 6.24662Z" fill="#717579"></path>
-										<path d="M14.4751 16.485C14.3336 16.5765 14.1686 16.6252 14 16.6252C13.8314 16.6252 13.6664 16.5765 13.5249 16.485L0.875 8.30025V21.2721C0.875926 22.1279 1.2163 22.9484 1.82145 23.5536C2.42659 24.1587 3.24707 24.4991 4.10288 24.5H23.8971C24.7529 24.4991 25.5734 24.1587 26.1786 23.5536C26.7837 22.9484 27.1241 22.1279 27.125 21.2721V8.29938L14.4751 16.485Z" fill="#717579"></path>
-									</svg>
-									<span class="badge light text-white bg-danger rounded-circle">76</span>
-								</a>
-							</li>-->
 
 
 
@@ -126,21 +162,6 @@
 									<img src="../images/user.jpg" width="56" alt="">
 								</a>
 								<div class="dropdown-menu dropdown-menu-end">
-									<!-- <a href="javascript:void(0);" class="dropdown-item ai-icon">
-										<svg id="icon-user1" xmlns="http://www.w3.org/2000/svg" class="text-primary" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-											<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-											<circle cx="12" cy="7" r="4"></circle>
-										</svg>
-										<span class="ms-2">Profile </span>
-									</a>
-									<a href="javascript:void()" class="dropdown-item ai-icon">
-										<svg id="icon-inbox" xmlns="http://www.w3.org/2000/svg" class="text-success" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-											<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-											</path>
-											<polyline points="22,6 12,13 2,6"></polyline>
-										</svg>
-										<span class="ms-2">Inbox </span>
-									</a> -->
 									<a href="../signIn.php" class="dropdown-item ai-icon">
 										<svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 											<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -167,115 +188,36 @@
 		<div class="dlabnav">
 			<div class="dlabnav-scroll">
 				<ul class="metismenu" id="menu">
-					<li><a href="../SalesMarketingmodule/ceo_dashboard.php" aria-expanded="false">
+					<li><a href="../Financemodule/ceo_dashboard.php" aria-expanded="false">
 							<i class="fas fa-home"></i>
 							<span class="nav-text">Dashboard</span>
 						</a>
 					</li>
 
-					<!-- <li><a href="alldata/financ" aria-expanded="false">
-							<i class="fas fa-info-circle"></i>
-							<span class="nav-text">Finance</span>
-						</a>
-
-					</li> -->
 					<li><a href="../SalesMarketingmodule/sales.php" aria-expanded="false">
 							<i class="fas fa-chart-line"></i>
 							<span class="nav-text">Sales</span>
 						</a>
-						<!-- <ul aria-expanded="false">
-                            <li><a href="chart-flot.html">Flot</a></li>
-                            <li><a href="chart-morris.html">Morris</a></li>
-                            <li><a href="chart-chartjs.html">Chartjs</a></li>
-                            <li><a href="chart-chartist.html">Chartist</a></li>
-                            <li><a href="chart-sparkline.html">Sparkline</a></li>
-                            <li><a href="chart-peity.html">Peity</a></li>
-                        </ul> -->
 					</li>
 					<li><a href="../SalesMarketingmodule/marketing.php" aria-expanded="false">
 							<i class="fab fa-bootstrap"></i>
 							<span class="nav-text">Marketing</span>
 						</a>
-						<!-- <ul aria-expanded="false">
-                            <li><a href="ui-accordion.html">Accordion</a></li>
-                            <li><a href="ui-alert.html">Alert</a></li>
-                            <li><a href="ui-badge.html">Badge</a></li>
-                            <li><a href="ui-button.html">Button</a></li>
-                            <li><a href="ui-modal.html">Modal</a></li>
-                            <li><a href="ui-button-group.html">Button Group</a></li>
-                            <li><a href="ui-list-group.html">List Group</a></li>
-                            <li><a href="ui-card.html">Cards</a></li>
-                            <li><a href="ui-carousel.html">Carousel</a></li>
-                            <li><a href="ui-dropdown.html">Dropdown</a></li>
-                            <li><a href="ui-popover.html">Popover</a></li>
-                            <li><a href="ui-progressbar.html">Progressbar</a></li>
-                            <li><a href="ui-tab.html">Tab</a></li>
-                            <li><a href="ui-typography.html">Typography</a></li>
-                            <li><a href="ui-pagination.html">Pagination</a></li>
-                            <li><a href="ui-grid.html">Grid</a></li>
-
-                        </ul> -->
 					</li>
-					<!-- <li><a href="alldata/operational.php" aria-expanded="false">
-							<i class="fas fa-table"></i>
-							<span class="nav-text">Operational</span>
-						</a> -->
-						<!-- <ul aria-expanded="false">
-                            <li><a href="table-bootstrap-basic.html">Bootstrap</a></li>
-                            <li><a href="table-datatable-basic.html">Datatable</a></li>
-                        </ul> -->
-					<!-- </li> -->
-					<li><a href="../SalesMarketingmodule/fileUpload.php" aria-expanded="false">
+
+					<li><a href="../Financemodule/fileUpload.php" aria-expanded="false">
 							<i class="fas fa-heart"></i>
 							<span class="nav-text">Files Upload</span>
 						</a>
 
 					</li>
-					<!-- <li><a href="../ceo_dashboard/addUser.php" class="" aria-expanded="false">
-							<i class="fas fa-user-check"></i>
-							<span class="nav-text">Add User</span>
-						</a>
-					</li> -->
-					<li><a href="../SalesMarketingmodule/emailCompose.php" aria-expanded="false">
+
+					<li><a href="../Financemodule/emailCompose.php" aria-expanded="false">
 							<i class="fas fa-file-alt"></i>
 							<span class="nav-text">Send Email</span>
 						</a>
-						<!-- <ul aria-expanded="false">
-                             <li><a href="form-element.html">Form Elements</a></li>
-                            <li><a href="form-wizard.html">Wizard</a></li>
-                            <li><a href="form-ckeditor.html">CkEditor</a></li>
-                            <li><a href="form-pickers.html">Pickers</a></li>
-                            <li><a href="form-validation.html">Form Validate</a></li> 
-                        </ul> -->
+
 					</li>
-
-					<!-- <li><a href="javascript:void()" aria-expanded="false">
-							<i class="fas fa-clone"></i>
-							<span class="nav-text">Pages</span>
-						</a> -->
-						<!-- <ul aria-expanded="false">
-                            <li><a href="page-login.html">Login</a></li>
-                            <li><a href="page-register.html">Register</a></li>
-                            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Error</a>
-                                <ul aria-expanded="false">
-                                    <li><a href="page-error-400.html">Error 400</a></li>
-                                    <li><a href="page-error-403.html">Error 403</a></li>
-                                    <li><a href="page-error-404.html">Error 404</a></li>
-                                    <li><a href="page-error-500.html">Error 500</a></li>
-                                    <li><a href="page-error-503.html">Error 503</a></li>
-                                </ul> 
-                            </li>
-                            <li><a href="page-lock-screen.html">Lock Screen</a></li>
-                            <li><a href="empty-page.html">Empty Page</a></li>
-                        </ul> 
-                    </li>-->
-                </ul>
-
-
-						<!-- <div class="copyright">
-							<p><strong>Felix CEO dashboard</strong> © 2023 All Rights Reserved</p>
-							<p class="fs-12">Made with aron2k02</p>
-						</div> -->
 
 			</div>
 		</div>
@@ -287,70 +229,177 @@
             Content body start
         ***********************************-->
 		<div class="content-body">
-			<div class="container-fluid" style="display: flex; justify-content: space-evenly;">
-				<div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
-					<div class="widget-stat card">
-						<div class="card-body p-4">
-							<div class="media ai-icon">
-								<span class="me-3 bgl-primary text-primary">
-									<!-- <i class="ti-user"></i> -->
-									<svg id="icon-customers" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
-										<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-										<circle cx="12" cy="7" r="4"></circle>
-									</svg>
-								</span>
-								<div class="media-body">
-									<p class="mb-1">Patient</p>
-									<h4 class="mb-0">3280</h4>
-									<span class="badge badge-primary">+3.5%</span>
+			<div class="container-fluid">
+				<div class="row">
+
+					<div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
+						<div class="widget-stat card">
+							<div class="card-body p-4">
+								<div class="media ai-icon">
+									<span class="me-3 bgl-warning text-warning">
+										<svg id="icon-orders" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+											<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+											<polyline points="14 2 14 8 20 8"></polyline>
+											<line x1="16" y1="13" x2="8" y2="13"></line>
+											<line x1="16" y1="17" x2="8" y2="17"></line>
+											<polyline points="10 9 9 9 8 9"></polyline>
+										</svg>
+									</span>
+									<div class="media-body">
+										<p class="mb-1"> Revenue </p>
+										<h4 class="mb-0"> $<?php echo number_format($avg_revenue, 2); ?></h4>
+										<span class="badge badge-warning">Avg</span>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
-					<div class="widget-stat card">
-						<div class="card-body p-4">
-							<div class="media ai-icon">
-								<span class="me-3 bgl-warning text-warning">
-									<svg id="icon-orders" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
-										<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-										<polyline points="14 2 14 8 20 8"></polyline>
-										<line x1="16" y1="13" x2="8" y2="13"></line>
-										<line x1="16" y1="17" x2="8" y2="17"></line>
-										<polyline points="10 9 9 9 8 9"></polyline>
-									</svg>
-								</span>
-								<div class="media-body">
-									<p class="mb-1">Bills</p>
-									<h4 class="mb-0">2570</h4>
-									<span class="badge badge-warning">+3.5%</span>
+					<div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
+						<div class="widget-stat card">
+							<div class="card-body  p-4">
+								<div class="media ai-icon">
+									<span class="me-3 bgl-danger text-danger">
+										<svg id="icon-revenue" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign">
+											<line x1="12" y1="1" x2="12" y2="23"></line>
+											<path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+										</svg>
+									</span>
+									<div class="media-body">
+										<p class="mb-1">Cost per Acquisition</p>
+										<h4 class="mb-0">$ <?php echo number_format($avg_cpa, 2); ?></h4>
+										<span class="badge badge-success">Avg</span>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
-					<div class="widget-stat card">
-						<div class="card-body  p-4">
-							<div class="media ai-icon">
-								<span class="me-3 bgl-danger text-danger">
-									<svg id="icon-revenue" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign">
-										<line x1="12" y1="1" x2="12" y2="23"></line>
-										<path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-									</svg>
-								</span>
-								<div class="media-body">
-									<p class="mb-1">Revenue</p>
-									<h4 class="mb-0">364.50K</h4>
-									<span class="badge badge-danger">-3.5%</span>
+					<div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
+						<div class="widget-stat card">
+							<div class="card-body  p-4">
+								<div class="media ai-icon">
+									<span class="me-3 bgl-primary text-primary">
+										<!-- <i class="ti-user"></i> -->
+										<svg id="icon-customers" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
+											<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+											<circle cx="12" cy="7" r="4"></circle>
+										</svg>
+									</span>
+									<div class="media-body">
+										<p class="mb-1">Market Share Value</p>
+										<h4 class="mb-0">$<?php echo number_format($avg_market_share, 2) ?></h4>
+										<span class="badge badge-primary">shares</span>
+									</div>
 								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="col-xl-4 col-xxl-6 col-lg-6">
+						<div class="card">
+							<div class="card-header">
+								<h4 class="card-title">Company Impressions</h4>
+								<span class="badge badge-primary">customer view</span>
+							</div>
+							<div class="card-body">
+								<canvas id="barChart" width="400" height="400"></canvas>
+								<script>
+									// Data from PHP
+									var labels = <?php echo json_encode($labels); ?>;
+									var impressions = <?php echo json_encode($impressions); ?>;
+
+									// Create bar chart
+									var ctx = document.getElementById('barChart').getContext('2d');
+									var barChart = new Chart(ctx, {
+										type: 'bar',
+										data: {
+											labels: labels,
+											datasets: [{
+												label: 'Impressions',
+												data: impressions,
+												backgroundColor: 'rgba(54, 162, 235, 0.5)',
+												borderColor: 'rgba(54, 162, 235, 1)',
+												borderWidth: 1
+											}]
+										},
+										options: {
+											scales: {
+												yAxes: [{
+													ticks: {
+														beginAtZero: true
+													}
+												}]
+											}
+										}
+									});
+								</script>
+
+
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-4 col-xxl-6 col-lg-6">
+						<div class="card">
+							<div class="card-header">
+								<h4 class="card-title">Brand Awarness By Social Media</h4>
+							</div>
+							<div class="card-body">
+								<canvas id="doughnutChart" width="400" height="400"></canvas>
+								<script>
+									// Data from PHP
+									var labels = <?php echo json_encode($labels3); ?>;
+									var counts = <?php echo json_encode($counts3); ?>;
+
+									// Create doughnut chart
+									var ctx = document.getElementById('doughnutChart').getContext('2d');
+									var doughnutChart = new Chart(ctx, {
+										type: 'doughnut',
+										data: {
+											labels: labels,
+											datasets: [{
+												label: 'Brand Awareness Count',
+												data: counts,
+												backgroundColor: [
+													'rgba(255, 99, 132, 0.5)',
+													'rgba(54, 162, 235, 0.5)',
+													'rgba(255, 206, 86, 0.5)',
+													'rgba(75, 192, 192, 0.5)',
+													'rgba(153, 102, 255, 0.5)'
+												],
+												borderColor: [
+													'rgba(255, 99, 132, 1)',
+													'rgba(54, 162, 235, 1)',
+													'rgba(255, 206, 86, 1)',
+													'rgba(75, 192, 192, 1)',
+													'rgba(153, 102, 255, 1)'
+												],
+												borderWidth: 1
+											}]
+										},
+										options: {
+											scales: {
+												yAxes: [{
+													ticks: {
+														beginAtZero: true
+													}
+												}]
+											}
+										}
+									});
+								</script>
+
+
+
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+
+
+
 		<!-- </div> -->
 
 		<!--**********************************
@@ -363,7 +412,7 @@
         ***********************************-->
 		<div class="footer">
 			<div class="copyright">
-				<p>Copyright © Designed &amp; Developed by aron2k23</p>
+				<p>Copyright © Designed &amp; Developed by aron2k02</p>
 			</div>
 		</div>
 		<!--**********************************
@@ -388,6 +437,53 @@
 	<script src="../js/dlabnav-init.js"></script>
 	<script src="../js/demo.js"></script>
 	<script src="../js/styleSwitcher.js"></script>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+
+
+	<!-- Required vendors -->
+
+	<script src="../vendor/chart.js/Chart.bundle.min.js"></script>
+	<!-- Apex Chart -->
+	<script src="../vendor/apexchart/apexchart.js"></script>
+
+	<script src="../vendor/jquery-nice-select/js/jquery.nice-select.min.js"></script>
+
+	<!-- Chart ChartJS plugin files -->
+	<script src="../vendor/chart.js/Chart.bundle.min.js"></script>
+	<script src="../js/plugins-init/chartjs-init.js"></script>
+	<script>
+		// to year and expenses
+	</script>
+	<script>
+		// JavaScript code to create the line chart using Chart.js
+		var ctx = document.getElementById('chart2').getContext('2d');
+		var myChart = new Chart(ctx, {
+			type: 'pie', // Change the type to 'line' for line chart
+			data: {
+				labels: ['Amount Payable', 'Amount Receivable'], // Labels for the sections of the line chart
+				datasets: [{
+					data: [<?php echo  $total_payable; ?>, <?php echo $total_receivable; ?>], // Data values for the sections
+					backgroundColor: [
+						'rgba(255, 99, 132, 0.5)', // Red color for Amount Payable
+						'rgba(54, 162, 235, 0.5)' // Blue color for Amount Receivable
+					],
+					borderColor: [
+						'rgba(255, 99, 132, 1)', // Border color for Amount Payable
+						'rgba(54, 162, 235, 1)' // Border color for Amount Receivable
+					],
+					borderWidth: 1, // Border width
+					fill: false // Do not fill the area under the line
+				}]
+			},
+			options: {
+				title: {
+					display: true,
+					text: 'Amount Payable vs. Amount Receivable' // Title for the line chart
+				}
+			}
+		});
+	</script>
+
 
 </body>
 

@@ -103,7 +103,7 @@ include 'config.php';
                     </div>
                     <div class="mb-3">
                       <label class="mb-1"><strong>Password</strong></label>
-                      <input type="password" id="password" name="password" class="form-control" required data-parsley-trigger="change" data-parsley-minlength="8" data-parsley-pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$" data-parsley-pattern-message="The password must include at least 1 upper case letter, 8 characters and a symbol"  data-parsley-required />
+                      <input type="password" id="password" name="password" class="form-control" required data-parsley-trigger="change" data-parsley-minlength="8" data-parsley-pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$" data-parsley-pattern-message="The password must include at least 1 upper case letter, 8 characters and a symbol" data-parsley-required />
                     </div>
                     <div class="row d-flex justify-content-between mt-4 mb-2">
                       <!-- <div class="mb-3">
@@ -113,14 +113,14 @@ include 'config.php';
                         </div>
                       </div> -->
                       <div class="text-center">
-                        <button type="submit" id="signInBtn" class="btn btn-primary btn-block">Sign Me In</button>
+                        <button id="signInBtn" class="btn btn-primary btn-block">Sign Me in</button>
                       </div>
                   </form>
-                  <div class="new-account mt-3">
+                  <!-- <div class="new-account mt-3">
                     <p> Don't have an account?
                       <a class="text-primary" href="signUp.php">Sign up</a>
                     </p>
-                  </div>
+                  </div> -->
                   <div id="Result"> </div>
                 </div>
               </div>
@@ -173,9 +173,21 @@ include 'config.php';
               console.log(response);
               if (response == "OK") {
                 $("#Result").html(`<div class="alert alert-success fade show" role="alert"> Successfully Signed In! </div>`);
-                window.location.href = "./Ceomodule/ceo_dashboard.php";
+                // window.location.href = "./Ceomodule/ceo_dashboard.php";
               } else {
-                $("#Result").html(`<div class="alert alert-danger fade show" role="alert"> ${response}</div>`);
+                if (response == "finance") {
+                  window.location.href = "./Financemodule/ceo_dashboard.php";
+
+                }
+                elseif(response == "salesAndMarketing") {
+                  window.location.href = "./SalesMarketingmodule/ceo_dashboard.php";
+
+                }
+                elseif(response == "operation") {
+                  window.location.href = "./Operationalmodule/ceo_dashboard.php";
+
+                }
+                // $("#Result").html(`<div class="alert alert-danger fade show" role="alert"> ${response}</div>`);
               }
             }
           })

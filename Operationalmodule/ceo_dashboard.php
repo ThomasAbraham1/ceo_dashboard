@@ -22,7 +22,7 @@
 	<link href="../vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
 	<link href="../vendor/dropzone/dist/dropzone.css" rel="stylesheet">
 	<link href="../css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/fileUploadstyle.css">
+	<link rel="stylesheet" href="../css/fileUploadstyle.css">
 
 </head>
 
@@ -86,7 +86,7 @@
 
 						</div>
 						<ul class="navbar-nav header-right">
-							
+
 
 
 
@@ -95,7 +95,7 @@
 									<img src="../images/user.jpg" width="56" alt="">
 								</a>
 								<div class="dropdown-menu dropdown-menu-end">
-									
+
 									<a href="../signIn.php" class="dropdown-item ai-icon">
 										<svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 											<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -122,34 +122,34 @@
 		<div class="dlabnav">
 			<div class="dlabnav-scroll">
 				<ul class="metismenu" id="menu">
-					<li><a href="../Operationmodule/ceo_dashboard.php" aria-expanded="false">
+					<li><a href="../Operationalmodule/ceo_dashboard.php" aria-expanded="false">
 							<i class="fas fa-home"></i>
 							<span class="nav-text">Dashboard</span>
 						</a>
 					</li>
 
-					
+
 					<li><a href="../Operationalmodule/operational.php" aria-expanded="false">
 							<i class="fas fa-table"></i>
 							<span class="nav-text">Operational</span>
 						</a>
-						
+
 					</li>
-					<li><a href="../Operationmodule/fileUpload.php" aria-expanded="false">
+					<li><a href="../Operationalmodule/fileUpload.php" aria-expanded="false">
 							<i class="fas fa-heart"></i>
 							<span class="nav-text">Files Upload</span>
 						</a>
 
 					</li>
-				
-					<li><a href="../Operationmodule/email-compose.php" aria-expanded="false">
+
+					<li><a href="../Operationalmodule/emailCompose.php" aria-expanded="false">
 							<i class="fas fa-file-alt"></i>
 							<span class="nav-text">Send Email</span>
 						</a>
-						
+
 					</li>
 
-                </ul>
+				</ul>
 
 			</div>
 		</div>
